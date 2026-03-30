@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jetour CRM — Gestión de conversaciones WhatsApp para concesionarias</title>
+    <meta name="description" content="CRM de conversaciones omnicanal para Jetour Bolivia. Gestiona WhatsApp, Instagram y Messenger desde un solo lugar.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --green-primary: #16a34a;
+            --green-dark: #15803d;
+            --green-light: #22c55e;
+            --green-bg: #f0fdf4;
+            --green-bubble: #14532d;
+            --green-bubble-2: #166534;
+            --sidebar-bg: #ffffff;
+            --sidebar-active: #f0fdf4;
+            --main-bg: #f9fafb;
+            --chat-bg: #ffffff;
+            --border: #e5e7eb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --tag-vip-bg: #fff7ed;
+            --tag-vip: #ea580c;
+            --tag-bot-bg: #f3f4f6;
+            --tag-bot: #374151;
+            --tag-asesor-bg: #fff7ed;
+            --tag-asesor: #ea580c;
+            --bubble-user-bg: #f3f4f6;
+            --notice-bg: #fef2f2;
+            --notice-text: #dc2626;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a1628;
+            color: #f1f5f9;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: radial-gradient(ellipse at 50% 0%, rgba(22, 163, 74, 0.18) 0%, transparent 60%),
+                        #0a1628;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(22, 163, 74, 0.12);
+            border: 1px solid rgba(22, 163, 74, 0.3);
+            color: #4ade80;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .hero-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .hero-logo-jetour {
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
+            background: #fff;
+            border-radius: 12px;
+        }
+
+        .hero-logo-jetour svg { height: 28px; }
+
+        .hero-logo-sep {
+            width: 1px;
+            height: 36px;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .hero-logo-crm {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: var(--green-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(22, 163, 74, 0.35);
+        }
+
+        .hero h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 span { color: #4ade80; }
+
+        .hero-tagline {
+            font-size: 1.15rem;
+            color: #94a3b8;
+            max-width: 520px;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-sub {
+            color: #64748b;
+            font-size: 0.9rem;
+            max-width: 460px;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 2rem;
+            background: var(--green-primary);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-primary:hover {
+            background: var(--green-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(22, 163, 74, 0.4);
+        }
+
+        /* ========== SECTIONS ========== */
+        section { padding: 5rem 1.5rem; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: #f1f5f9;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 3rem;
+            max-width: 540px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ========== CHANNELS ========== */
+        .channels { background: #0f1f38; }
+
+        .channels-grid {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .channel-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .channel-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        .channel-icon:hover { transform: scale(1.08); }
+        .channel-icon.whatsapp { background: rgba(37, 211, 102, 0.12); border: 1px solid rgba(37, 211, 102, 0.2); }
+        .channel-icon.instagram { background: rgba(225, 48, 108, 0.12); border: 1px solid rgba(225, 48, 108, 0.2); }
+        .channel-icon.messenger { background: rgba(0, 132, 255, 0.12); border: 1px solid rgba(0, 132, 255, 0.2); }
+
+        .channel-name { font-weight: 500; font-size: 0.95rem; color: #cbd5e1; }
+
+        /* ========== FEATURES ========== */
+        .features { background: #0a1628; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: #0f1f38;
+            border: 1px solid #1e3a5f;
+            border-radius: 14px;
+            padding: 2rem;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .feature-card:hover {
+            border-color: var(--green-primary);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(22, 163, 74, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #4ade80; }
+
+        .feature-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; color: #f1f5f9; }
+        .feature-card p { color: #94a3b8; font-size: 0.88rem; line-height: 1.6; }
+
+        /* ========== CRM MOCKUP ========== */
+        .mockup-section { background: #0f1f38; }
+
+        .crm-mockup {
+            max-width: 980px;
+            margin: 0 auto;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #1e3a5f;
+            display: grid;
+            grid-template-columns: 56px 320px 1fr;
+            height: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            background: var(--main-bg);
+        }
+
+        /* Sidebar */
+        .mock-sidebar {
+            background: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 14px 0;
+            gap: 4px;
+            border-right: 1px solid var(--border);
+        }
+
+        .mock-sidebar-logo {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            overflow: hidden;
+            background: #fff;
+            border: 1px solid var(--border);
+        }
+        .mock-sidebar-logo svg { width: 22px; height: 22px; }
+
+        .mock-sidebar-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            flex-direction: column;
+            gap: 2px;
+            transition: background 0.15s;
+        }
+        .mock-sidebar-icon.active { background: var(--sidebar-active); color: var(--green-primary); }
+        .mock-sidebar-icon svg { width: 18px; height: 18px; }
+        .mock-sidebar-icon span { font-size: 0.5rem; font-weight: 600; color: inherit; line-height: 1; }
+
+        .mock-sidebar-spacer { flex: 1; }
+
+        .mock-connected {
+            font-size: 0.55rem;
+            font-weight: 600;
+            color: var(--green-primary);
+            background: var(--green-bg);
+            border: 1px solid rgba(22,163,74,0.3);
+            border-radius: 8px;
+            padding: 3px 4px;
+            text-align: center;
+            margin: 0 4px;
+            line-height: 1.3;
+        }
+
+        /* Chat list */
+        .mock-chatlist {
+            background: var(--chat-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .mock-chatlist-header {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .mock-chatlist-header h3 { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+
+        .mock-header-actions { display: flex; gap: 6px; align-items: center; }
+        .mock-btn-nueva {
+            background: var(--green-primary);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .mock-channel-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 8px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .mock-channel-tab {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid var(--border);
+            transition: border-color 0.15s;
+        }
+        .mock-channel-tab.active { border-color: var(--green-primary); }
+        .mock-channel-tab svg { width: 15px; height: 15px; }
+
+        .mock-search {
+            margin: 8px 12px;
+            padding: 7px 12px;
+            background: var(--main-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mock-filter-tabs {
+            display: flex;
+            gap: 0;
+            padding: 0 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .mock-filter-tab {
+            padding: 6px 8px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+        }
+        .mock-filter-tab.active { color: var(--green-primary); border-bottom-color: var(--green-primary); font-weight: 600; }
+
+        .mock-chats { flex: 1; overflow: hidden; }
+
+        .mock-chat-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            padding: 9px 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+            cursor: default;
+        }
+        .mock-chat-item.active { background: var(--sidebar-active); }
+
+        .mock-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--green-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .mock-avatar.purple { background: #7c3aed; }
+        .mock-avatar.blue { background: #2563eb; }
+        .mock-avatar.pink { background: #db2777; }
+
+        .mock-avatar-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+        .mock-avatar-dot.green { background: var(--green-primary); }
+        .mock-avatar-dot.gray { background: #9ca3af; }
+
+        .mock-chat-info { flex: 1; min-width: 0; }
+        .mock-chat-row1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2px;
+        }
+        .mock-chat-name { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); }
+        .mock-chat-time { font-size: 0.65rem; color: var(--text-muted); white-space: nowrap; }
+        .mock-chat-preview { font-size: 0.7rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+        .mock-chat-footer { display: flex; align-items: center; gap: 4px; }
+
+        .mock-tag-sm {
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+        .mock-tag-sm.vip { background: #fff7ed; color: #ea580c; }
+        .mock-tag-sm.bot { background: #f3f4f6; color: #374151; }
+        .mock-tag-sm.asesor { background: #fff7ed; color: #ea580c; }
+
+        .mock-unread {
+            background: var(--green-primary);
+            color: #fff;
+            font-size: 0.6rem;
+            font-weight: 700;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+        }
+
+        /* Chat panel */
+        .mock-chatpanel {
+            background: var(--chat-bg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mock-chatpanel-header {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .mock-contact-name { font-size: 0.88rem; font-weight: 700; color: var(--text-primary); }
+        .mock-contact-phone { font-size: 0.68rem; color: var(--text-muted); }
+
+        .mock-header-tags { display: flex; align-items: center; gap: 6px; }
+        .mock-assignee {
+            font-size: 0.68rem;
+            color: var(--green-primary);
+            background: var(--green-bg);
+            border: 1px solid rgba(22,163,74,0.25);
+            border-radius: 5px;
+            padding: 3px 8px;
+            font-weight: 500;
+        }
+        .mock-tag-vip {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: var(--tag-vip);
+            background: var(--tag-vip-bg);
+            border: 1px solid rgba(234,88,12,0.2);
+            border-radius: 5px;
+            padding: 3px 8px;
+        }
+
+        .mock-notice {
+            padding: 7px 16px;
+            background: var(--notice-bg);
+            border-bottom: 1px solid #fecaca;
+            font-size: 0.72rem;
+            color: var(--notice-text);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .mock-notice::before { content: "●"; font-size: 0.6rem; }
+
+        .mock-messages {
+            flex: 1;
+            padding: 14px 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #f9f9f9;
+        }
+
+        .mock-msg {
+            max-width: 72%;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.76rem;
+            line-height: 1.5;
+        }
+        .mock-msg.bot {
+            align-self: flex-end;
+            background: var(--green-bubble);
+            color: #dcfce7;
+            border-bottom-right-radius: 3px;
+        }
+        .mock-msg.user {
+            align-self: flex-start;
+            background: var(--bubble-user-bg);
+            color: var(--text-primary);
+            border-bottom-left-radius: 3px;
+        }
+        .mock-msg-meta {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.5);
+            text-align: right;
+            margin-top: 3px;
+        }
+        .mock-msg.user .mock-msg-meta { color: var(--text-muted); }
+
+        .mock-msg-doc {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+        }
+        .mock-msg-doc svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+        .mock-input-bar {
+            padding: 9px 14px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--chat-bg);
+        }
+
+        .mock-input-actions { display: flex; gap: 6px; }
+        .mock-input-actions svg { width: 18px; height: 18px; color: #9ca3af; }
+
+        .mock-input {
+            flex: 1;
+            background: var(--main-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .mock-send-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--green-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .mock-send-btn svg { width: 16px; height: 16px; color: #fff; }
+
+        /* ========== META REVIEWERS ========== */
+        .meta-section { background: #0a1628; }
+
+        .meta-box {
+            max-width: 640px;
+            margin: 0 auto;
+            background: #0f1f38;
+            border: 1px solid rgba(22, 163, 74, 0.3);
+            border-radius: 16px;
+            padding: 2.5rem;
+        }
+
+        .meta-box h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #f1f5f9;
+        }
+
+        .meta-box > p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .meta-field { margin-bottom: 1rem; }
+        .meta-field label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.35rem;
+        }
+        .meta-field .meta-value {
+            background: #0a1628;
+            border: 1px solid #1e3a5f;
+            border-radius: 8px;
+            padding: 0.7rem 1rem;
+            font-size: 0.9rem;
+            color: #f1f5f9;
+        }
+
+        .meta-note {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(22, 163, 74, 0.08);
+            border-left: 3px solid var(--green-primary);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.82rem;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: #060e1c;
+            border-top: 1px solid #1e3a5f;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        .footer-content p { color: #64748b; font-size: 0.82rem; line-height: 1.8; }
+        .footer-content a { color: #4ade80; text-decoration: none; }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.75rem; }
+            .hero-tagline { font-size: 1rem; }
+
+            .crm-mockup {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                height: auto;
+            }
+            .mock-sidebar {
+                flex-direction: row;
+                padding: 10px 14px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                overflow-x: auto;
+            }
+            .mock-sidebar-logo { margin-bottom: 0; }
+            .mock-chatlist { border-right: none; border-bottom: 1px solid var(--border); max-height: 240px; }
+            .mock-chatpanel { min-height: 320px; }
+            .meta-box { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+    <div class="hero-badge">
+        <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#4ade80"/></svg>
+        Sistema conectado
+    </div>
+    <div class="hero-logos">
+        <div class="hero-logo-jetour">
+            <!-- Jetour wordmark SVG -->
+            <svg viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <text x="0" y="24" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#111827" letter-spacing="-1">JETOUR</text>
+            </svg>
+        </div>
+        <div class="hero-logo-sep"></div>
+        <div class="hero-logo-crm">CRM</div>
+    </div>
+    <h1>Jetour <span>CRM</span></h1>
+    <p class="hero-tagline">Gestión omnicanal de conversaciones para concesionarias automotrices</p>
+    <p class="hero-sub">Centraliza WhatsApp, Instagram y Messenger. Gestiona leads, asigna asesores y automatiza el seguimiento de clientes desde un solo inbox.</p>
+    <a href="#" class="btn-primary">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Acceder al sistema
+    </a>
+</section>
+
+<!-- ==================== CHANNELS ==================== -->
+<section class="channels">
+    <div class="container">
+        <h2 class="section-title">Canales integrados</h2>
+        <p class="section-subtitle">Atiende a tus clientes donde estén, sin perder ninguna conversación.</p>
+        <div class="channels-grid">
+            <div class="channel-item">
+                <div class="channel-icon whatsapp">
+                    <svg viewBox="0 0 24 24" width="34" height="34" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                </div>
+                <span class="channel-name">WhatsApp</span>
+            </div>
+            <div class="channel-item">
+                <div class="channel-icon instagram">
+                    <svg viewBox="0 0 24 24" width="34" height="34" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                </div>
+                <span class="channel-name">Instagram</span>
+            </div>
+            <div class="channel-item">
+                <div class="channel-icon messenger">
+                    <svg viewBox="0 0 24 24" width="34" height="34" fill="#0084FF"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111S18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8.2l3.131 3.26 5.887-3.26-6.559 6.763z"/></svg>
+                </div>
+                <span class="channel-name">Messenger</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== FEATURES ==================== -->
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Características principales</h2>
+        <p class="section-subtitle">Herramientas diseñadas para el proceso comercial de una concesionaria moderna.</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <h3>Inbox unificado</h3>
+                <p>Todas las conversaciones de WhatsApp, Instagram y Messenger en un solo lugar. Filtra por estado: sin leer, esperan asesor o cerradas.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <h3>Bot y plantillas automatizadas</h3>
+                <p>Responde automáticamente con plantillas aprobadas por WhatsApp. Captura leads fuera de horario y deriva al asesor correcto.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3>Etiquetas y asignación</h3>
+                <p>Etiqueta clientes como VIP, Asesor o Bot. Asigna conversaciones a tu equipo de ventas y haz seguimiento de cada oportunidad.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                </div>
+                <h3>Campañas masivas</h3>
+                <p>Envía campañas de WhatsApp a segmentos de clientes. Lanza promociones de modelos, seguimientos post-visita y recordatorios de servicio.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== CRM MOCKUP ==================== -->
+<section class="mockup-section">
+    <div class="container">
+        <h2 class="section-title">Interfaz del sistema</h2>
+        <p class="section-subtitle">Un inbox profesional diseñado para el equipo comercial de Jetour Bolivia.</p>
+        <div class="crm-mockup">
+
+            <!-- Sidebar -->
+            <div class="mock-sidebar">
+                <div class="mock-sidebar-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div class="mock-sidebar-icon active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    <span>Inbox</span>
+                </div>
+                <div class="mock-sidebar-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    <span>Etiquetas</span>
+                </div>
+                <div class="mock-sidebar-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <span>Canales</span>
+                </div>
+                <div class="mock-sidebar-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span>Campañas</span>
+                </div>
+                <div class="mock-sidebar-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                    <span>Contactos</span>
+                </div>
+                <div class="mock-sidebar-spacer"></div>
+                <div class="mock-connected">● Conectado</div>
+            </div>
+
+            <!-- Chat List -->
+            <div class="mock-chatlist">
+                <div class="mock-chatlist-header">
+                    <h3>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366" style="vertical-align:middle;margin-right:5px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                        Inbox
+                    </h3>
+                    <div class="mock-header-actions">
+                        <div class="mock-btn-nueva">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Nueva
+                        </div>
+                    </div>
+                </div>
+                <div class="mock-channel-tabs">
+                    <div class="mock-channel-tab active">
+                        <svg viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12" stroke="#fff" stroke-width="1.5"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="#fff" stroke-width="1.5" fill="none"/></svg>
+                    </div>
+                    <div class="mock-channel-tab">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                    </div>
+                    <div class="mock-channel-tab">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                    </div>
+                    <div class="mock-channel-tab">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="#0084FF"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111S18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8.2l3.131 3.26 5.887-3.26-6.559 6.763z"/></svg>
+                    </div>
+                </div>
+                <div class="mock-search">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    Buscar contacto...
+                </div>
+                <div class="mock-filter-tabs">
+                    <div class="mock-filter-tab active">Todas</div>
+                    <div class="mock-filter-tab">Sin leer</div>
+                    <div class="mock-filter-tab">Esperan asesor</div>
+                    <div class="mock-filter-tab">Cerradas</div>
+                </div>
+                <div class="mock-chats">
+                    <div class="mock-chat-item active">
+                        <div class="mock-avatar">MG
+                            <div class="mock-avatar-dot green"></div>
+                        </div>
+                        <div class="mock-chat-info">
+                            <div class="mock-chat-row1">
+                                <span class="mock-chat-name">Mario García</span>
+                                <span class="mock-chat-time">27 mar, 16:29</span>
+                            </div>
+                            <div class="mock-chat-preview">[Plantilla: contacto_inicial_jetour]</div>
+                            <div class="mock-chat-footer">
+                                <span style="font-size:0.62rem;color:#9ca3af;">591*******</span>
+                                <span class="mock-tag-sm bot">Bot</span>
+                                <span class="mock-tag-sm vip">● VIP</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mock-chat-item">
+                        <div class="mock-avatar blue">JP
+                            <div class="mock-avatar-dot gray"></div>
+                        </div>
+                        <div class="mock-chat-info">
+                            <div class="mock-chat-row1">
+                                <span class="mock-chat-name">Usuario Demo</span>
+                                <span class="mock-chat-time">18 mar, 14:50</span>
+                            </div>
+                            <div class="mock-chat-preview">Mensaje de respuesta preconfigurado.</div>
+                            <div class="mock-chat-footer">
+                                <span style="font-size:0.62rem;color:#9ca3af;">591*******</span>
+                                <div class="mock-unread">1</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mock-chat-item">
+                        <div class="mock-avatar purple">RP
+                            <div class="mock-avatar-dot gray"></div>
+                        </div>
+                        <div class="mock-chat-info">
+                            <div class="mock-chat-row1">
+                                <span class="mock-chat-name">Roberto P.</span>
+                                <span class="mock-chat-time">18 mar, 00:30</span>
+                            </div>
+                            <div class="mock-chat-preview">[Plantilla: contacto_inicial_jetour]</div>
+                            <div class="mock-chat-footer">
+                                <span style="font-size:0.62rem;color:#9ca3af;">591*******</span>
+                                <span class="mock-tag-sm asesor">Asesor</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mock-chat-item">
+                        <div class="mock-avatar pink">LM
+                            <div class="mock-avatar-dot green"></div>
+                        </div>
+                        <div class="mock-chat-info">
+                            <div class="mock-chat-row1">
+                                <span class="mock-chat-name">Laura M.</span>
+                                <span class="mock-chat-time">17 mar, 23:03</span>
+                            </div>
+                            <div class="mock-chat-preview">Hola, buenos días</div>
+                            <div class="mock-chat-footer">
+                                <span style="font-size:0.62rem;color:#9ca3af;">591*******</span>
+                                <span class="mock-tag-sm bot">Bot</span>
+                                <div class="mock-unread">1</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Panel -->
+            <div class="mock-chatpanel">
+                <div class="mock-chatpanel-header">
+                    <div>
+                        <div class="mock-contact-name">Mario García</div>
+                        <div class="mock-contact-phone">591*******</div>
+                    </div>
+                    <div class="mock-header-tags">
+                        <span class="mock-assignee">Emilio S.</span>
+                        <span class="mock-tag-vip">● VIP</span>
+                    </div>
+                </div>
+                <div class="mock-notice">Ventana cerrada · Solo plantillas</div>
+                <div class="mock-messages">
+                    <div class="mock-msg user">
+                        Muchas gracias por la informacion
+                        <div class="mock-msg-meta" style="color:#6b7280;">12:45</div>
+                    </div>
+                    <div class="mock-msg bot">
+                        [Bot] Menu principal enviado
+                        <div class="mock-msg-meta">12:46 ✓</div>
+                    </div>
+                    <div class="mock-msg user">
+                        Hola
+                        <div class="mock-msg-meta" style="color:#6b7280;">12:50</div>
+                    </div>
+                    <div class="mock-msg bot">
+                        [Bot] Menu principal enviado
+                        <div class="mock-msg-meta">12:51 ✓✓</div>
+                    </div>
+                    <div class="mock-msg bot">
+                        <div class="mock-msg-doc">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            Catalogo_Jetour_X50.pdf
+                        </div>
+                        <div class="mock-msg-meta">12:51 ✓✓</div>
+                    </div>
+                    <div class="mock-msg bot">
+                        [Plantilla: contacto_inicial_jetour]
+                        <div class="mock-msg-meta">16:29 ✓</div>
+                    </div>
+                </div>
+                <div class="mock-input-bar">
+                    <div class="mock-input-actions">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    </div>
+                    <div class="mock-input">Escribe un mensaje...</div>
+                    <div class="mock-send-btn">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ==================== META REVIEWERS ==================== -->
+<section class="meta-section">
+    <div class="container">
+        <div class="meta-box">
+            <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Acceso para revisores
+            </h2>
+            <p>Esta aplicación requiere autenticación. Use las siguientes credenciales de prueba:</p>
+            <div class="meta-field">
+                <label>URL del sistema</label>
+                <div class="meta-value">https://quantis-git-claude-review-d7ff00-juan-daniels-projects-bcc102e5.vercel.app/enterprise/quantis/crm/</div>
+            </div>
+            <div class="meta-field">
+                <label>Usuario</label>
+                <div class="meta-value">rol1@gmail.com</div>
+            </div>
+            <div class="meta-field">
+                <label>Contraseña</label>
+                <div class="meta-value">123456q</div>
+            </div>
+            <div class="meta-note">
+                <strong>Nota:</strong> La cuenta de prueba tiene una cuenta de Instagram Business ya vinculada para demostración del flujo completo de integración con la API de Instagram Messaging.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+    <div class="footer-content">
+        <p><strong style="color:#cbd5e1;">Q-Vantis Consulting S.R.L.</strong> · NIT 702509022</p>
+        <p>Santa Cruz de la Sierra, Bolivia</p>
+        <p><a href="mailto:administracion@quantis.com.bo">administracion@quantis.com.bo</a></p>
+    </div>
+</footer>
+
+</body>
+</html>
